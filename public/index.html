@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Bmate - Keeping people in touch</title>
+        <link rel="stylesheet" href="/css/all.css" media="screen" charset="utf-8">
+
+        <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+
+    </head>
+    <body>
+        <header id="app-header">
+            <div class="bmate">Bmate</div>
+            <div class="slogan">Keeping people in touch</div>
+        </header>
+        <section class="app-container">
+            <section class="receiver-container">
+                <!-- <img src="http://gravatar.com/avatar/d4b5ce7252972661c76349aa2013e74b?d=retro"
+                    title="New person" /> -->
+                <img src="http://gravatar.com/avatar/21733486eab437f1e2c230537de4fb9d?d=retro"
+                    title="New person" />
+            </section>
+
+            <video autoplay id="stage"></video>
+
+            <section class="direction-toolbar">
+
+            </section>
+        </section>
+        <footer></footer>
+
+        <script type="text/javascript">
+            navigator.getUserMedia = (navigator.getUserMedia
+                || navigator.webkitGetUserMedia
+                || navigator.mozGetUserMedia
+                || navigator.msgGetUserMedia);
+
+            if (navigator.getUserMedia) {
+                console.log('[OK] Your browser supports the video feature o/');
+
+                navigator.getUserMedia(
+                    { video: true, audio: true },
+                    function (stream) {
+                        var videoElem = document.querySelector('video#stage');
+
+                        videoElem.src = window.URL.createObjectURL(stream);
+                    },
+                    function (err) {
+                        console.error(err);
+                    });
+            } else {
+                console.warn('[FAIL] Your browser does not support the video feature');
+            }
+        </script>
+    </body>
+</html>

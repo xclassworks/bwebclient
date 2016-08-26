@@ -1,0 +1,61 @@
+body {
+    font-family: 'Montserrat', 'Roboto', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #262626;
+}
+
+header#app-header {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 15px;
+    background: #FFF;
+    box-shadow: 0 1px 2px rgba(51,51,51,0.4);
+    overflow: hidden;
+    cursor: default;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header#app-header .bmate {
+    font-weight: bold;
+    color: #32cf9f;
+    font-size: 1.2em;
+}
+
+header#app-header .slogan {
+    font-size: 0.9em;
+    color: rgba(38,38,38,0.5);
+}
+
+section.app-container {
+    overflow: hidden;
+    width: 100%;
+    padding-top: 20px;
+}
+
+section.app-container video#stage {
+    width: 80%;
+    display: block;
+    margin: auto;
+    background: #f4f4f4;
+    border-radius: 5px;
+}
+
+section.app-container .receiver-container {
+    width: 80%;
+    display: block;
+    margin: auto;
+}
+
+section.app-container .receiver-container img {
+    border: 4px solid rgba(50,207,159,0.5);
+    border-radius: 50%;
+    height: 60px;
+    width: 60px;
+    position: absolute;
+    margin: 10px;
+}
