@@ -6,7 +6,8 @@
         <link rel="stylesheet" href="/css/all.css" media="screen" charset="utf-8">
 
         <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
-
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" media="all"
+            rel="stylesheet" type="text/css" />
     </head>
     <body>
         <header id="app-header">
@@ -24,7 +25,25 @@
             <video autoplay id="stage"></video>
 
             <section class="direction-toolbar">
+                <div class="camera-joystick joystick">
+                    <div class="container">
+                        <i class="material-icons desc-icons" title="Camera Control">photo_camera</i>
+                        <i class="material-icons" title="Foward">keyboard_arrow_up</i>
+                        <i class="material-icons" title="Back">keyboard_arrow_down</i>
+                        <i class="material-icons" title="Left">keyboard_arrow_left</i>
+                        <i class="material-icons" title="Right">keyboard_arrow_right</i>
+                    </div>
+                </div>
 
+                <div class="moviment-joystick joystick">
+                    <div class="container">
+                        <i class="material-icons desc-icons" title="Motors Control">airport_shuttler</i>
+                        <i class="material-icons" title="Foward">keyboard_arrow_up</i>
+                        <i class="material-icons" title="Back">keyboard_arrow_down</i>
+                        <i class="material-icons" title="Left">keyboard_arrow_left</i>
+                        <i class="material-icons" title="Right">keyboard_arrow_right</i>
+                    </div>
+                </div>
             </section>
         </section>
         <footer></footer>
@@ -39,7 +58,7 @@
                 console.log('[OK] Your browser supports the video feature o/');
 
                 navigator.getUserMedia(
-                    { video: true, audio: true },
+                    { video: true, audio: false },
                     function (stream) {
                         var videoElem = document.querySelector('video#stage');
 

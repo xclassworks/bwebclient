@@ -35,18 +35,22 @@ section.app-container {
     overflow: hidden;
     width: 100%;
     padding-top: 20px;
+
+    position: fixed;
+    height: 100%;
 }
 
 section.app-container video#stage {
-    width: 80%;
+    /*width: 95%;*/
     display: block;
     margin: auto;
     background: #f4f4f4;
     border-radius: 5px;
+    height: 85%;
 }
 
 section.app-container .receiver-container {
-    width: 80%;
+    width: 95%;
     display: block;
     margin: auto;
 }
@@ -58,4 +62,80 @@ section.app-container .receiver-container img {
     width: 60px;
     position: absolute;
     margin: 10px;
+    z-index: 2;
+}
+
+section.app-container .direction-toolbar {
+    width: 95%;
+    display: flex;
+    margin: auto;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+section.app-container .direction-toolbar .joystick {
+    background: rgba(51,51,51,0.5);
+    position: relative;
+    margin-top: -100px;
+    padding: 10px;
+    border-radius: 60px;
+    box-shadow: 1px 1px 2px rgba(51,51,51,0.6);
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+section.app-container .direction-toolbar .joystick i {
+    cursor: pointer;
+    padding: 0 10px;
+    color: #FFF;
+}
+
+section.app-container .direction-toolbar .joystick i:hover {
+    color: rgba(50,207,159,1);
+}
+
+section.app-container .direction-toolbar .joystick i.desc-icons {
+    cursor: default !important;
+}
+
+section.app-container .direction-toolbar .joystick i.desc-icons:hover {
+    color: #FFF !important;
+}
+
+/*Material Design Icons Font Face declaration*/
+@font-face {
+  font-family: 'Material Icons';
+  font-style: normal;
+  font-weight: 400;
+  src: url(https://example.com/MaterialIcons-Regular.eot); /* For IE6-8 */
+  src: local('Material Icons'),
+       local('MaterialIcons-Regular'),
+       url(https://example.com/MaterialIcons-Regular.woff2) format('woff2'),
+       url(https://example.com/MaterialIcons-Regular.woff) format('woff'),
+       url(https://example.com/MaterialIcons-Regular.ttf) format('truetype');
+}
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;  /* Preferred icon size */
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+
+  /* Support for all WebKit browsers. */
+  -webkit-font-smoothing: antialiased;
+  /* Support for Safari and Chrome. */
+  text-rendering: optimizeLegibility;
+
+  /* Support for Firefox. */
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Support for IE. */
+  font-feature-settings: 'liga';
 }
