@@ -20,9 +20,14 @@
                     title="New person" /> -->
                 <img src="http://gravatar.com/avatar/21733486eab437f1e2c230537de4fb9d?d=retro"
                     title="New person" />
+
+                <div class="person-name">
+                    <div class="talt-phrase">Talking to</div> <strong>New Person</strong>
+                </div>
             </section>
 
             <video autoplay id="stage"></video>
+            <video autoplay id="mirror"></video>
 
             <section class="direction-toolbar">
                 <div class="camera-joystick joystick">
@@ -61,8 +66,10 @@
                     { video: true, audio: false },
                     function (stream) {
                         var videoElem = document.querySelector('video#stage');
+                        var videoMirror = document.querySelector("video#mirror");
 
                         videoElem.src = window.URL.createObjectURL(stream);
+                        videoMirror.src = window.URL.createObjectURL(stream);
                     },
                     function (err) {
                         console.error(err);
