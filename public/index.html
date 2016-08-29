@@ -14,12 +14,19 @@
             <div class="bmate">Bmate</div>
             <div class="slogan">Keeping people in touch</div>
         </header>
-        <section class="app-container">
+        <section class="token-container">
+            <div class="find-robot">
+                <h3>Please insert the robot token to start talk</h3>
+                <input type="text" name="robotToken" placeholder="Robot token" />
+                <button type="button" name="findRobot">Find robot</button>
+            </div>
+        </section>
+        <section class="app-container mask">
             <section class="receiver-container">
-                <!-- <img src="http://gravatar.com/avatar/d4b5ce7252972661c76349aa2013e74b?d=retro"
-                    title="New person" /> -->
-                <img src="http://gravatar.com/avatar/21733486eab437f1e2c230537de4fb9d?d=retro"
+                <img src="http://gravatar.com/avatar/d4b5ce7252972661c76349aa2013e74b?d=retro"
                     title="New person" />
+                <!-- <img src="http://gravatar.com/avatar/21733486eab437f1e2c230537de4fb9d?d=retro"
+                    title="New person" /> -->
 
                 <div class="person-name">
                     <div class="talt-phrase">Talking to</div> <strong>New Person</strong>
@@ -33,50 +40,26 @@
                 <div class="camera-joystick joystick">
                     <div class="container">
                         <i class="material-icons desc-icons" title="Camera Control">photo_camera</i>
-                        <i class="material-icons" title="Foward">keyboard_arrow_up</i>
-                        <i class="material-icons" title="Back">keyboard_arrow_down</i>
-                        <i class="material-icons" title="Left">keyboard_arrow_left</i>
-                        <i class="material-icons" title="Right">keyboard_arrow_right</i>
+                        <i class="material-icons" type="foward" title="Foward">keyboard_arrow_up</i>
+                        <i class="material-icons" type="back" title="Back">keyboard_arrow_down</i>
+                        <i class="material-icons" type="left" title="Left">keyboard_arrow_left</i>
+                        <i class="material-icons" type="right" title="Right">keyboard_arrow_right</i>
                     </div>
                 </div>
 
                 <div class="moviment-joystick joystick">
                     <div class="container">
                         <i class="material-icons desc-icons" title="Motors Control">airport_shuttler</i>
-                        <i class="material-icons" title="Foward">keyboard_arrow_up</i>
-                        <i class="material-icons" title="Back">keyboard_arrow_down</i>
-                        <i class="material-icons" title="Left">keyboard_arrow_left</i>
-                        <i class="material-icons" title="Right">keyboard_arrow_right</i>
+                        <i class="material-icons" type="foward" title="Foward">keyboard_arrow_up</i>
+                        <i class="material-icons" type="back" title="Back">keyboard_arrow_down</i>
+                        <i class="material-icons" type="left" title="Left">keyboard_arrow_left</i>
+                        <i class="material-icons" type="right" title="Right">keyboard_arrow_right</i>
                     </div>
                 </div>
             </section>
         </section>
         <footer></footer>
 
-        <script type="text/javascript">
-            navigator.getUserMedia = (navigator.getUserMedia
-                || navigator.webkitGetUserMedia
-                || navigator.mozGetUserMedia
-                || navigator.msgGetUserMedia);
-
-            if (navigator.getUserMedia) {
-                console.log('[OK] Your browser supports the video feature o/');
-
-                navigator.getUserMedia(
-                    { video: true, audio: false },
-                    function (stream) {
-                        var videoElem = document.querySelector('video#stage');
-                        var videoMirror = document.querySelector("video#mirror");
-
-                        videoElem.src = window.URL.createObjectURL(stream);
-                        videoMirror.src = window.URL.createObjectURL(stream);
-                    },
-                    function (err) {
-                        console.error(err);
-                    });
-            } else {
-                console.warn('[FAIL] Your browser does not support the video feature');
-            }
-        </script>
+        <script type="text/javascript" src="js/app.js"></script>
     </body>
 </html>

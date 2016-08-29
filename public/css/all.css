@@ -31,6 +31,57 @@ header#app-header .slogan {
     color: rgba(38,38,38,0.5);
 }
 
+section.token-container {
+    position: fixed;
+    z-index: 3;
+    width: 100%;
+    height: 100%;
+    background: rgba(255,255,255,0.5);
+}
+
+section.token-container .find-robot {
+    background: #FFF;
+    border-radius: 3px;
+    width: 50%;
+    margin: auto;
+    padding: 30px;
+    box-shadow: 1px 1px 7px rgba(0,0,0,0.5);
+    margin-top: 10%;
+}
+
+section.token-container .find-robot input[type="text"] {
+    outline: none;
+    padding: 10px;
+    border: 0;
+    border-bottom: rgba(50,207,159,0.5) 2px solid;
+    transition: all 0.2s ease;
+    width: 100%;
+    box-sizing: border-box;
+    color: rgba(0, 0, 0, 0.5);
+    font-size: 0.9em;
+}
+
+section.token-container .find-robot input[type="text"]:focus {
+    border-bottom-color: #32cf9f;
+    color: rgba(0, 0, 0, 1);
+}
+
+section.token-container .find-robot button {
+    margin-top: 30px;
+    background: #32cf9f;
+    border: none;
+    padding: 15px;
+    color: #FFF;
+    font-family: 'Montserrat', 'Roboto', Arial, sans-serif;
+    outline: none;
+    font-size: 0.9em;
+    text-transform: uppercase;
+}
+
+section.token-container .find-robot button:active {
+    opacity: 0.8;
+}
+
 section.app-container {
     overflow: hidden;
     width: 100%;
@@ -121,7 +172,8 @@ section.app-container .direction-toolbar .joystick i {
     color: #FFF;
 }
 
-section.app-container .direction-toolbar .joystick i:hover {
+section.app-container .direction-toolbar .joystick i:hover,
+section.app-container .direction-toolbar .joystick i.active {
     color: rgba(50,207,159,1);
 }
 
@@ -131,6 +183,11 @@ section.app-container .direction-toolbar .joystick i.desc-icons {
 
 section.app-container .direction-toolbar .joystick i.desc-icons:hover {
     color: #FFF !important;
+}
+
+.mask {
+    -webkit-filter: blur(8px);
+    filter: blur(8px);
 }
 
 /*Material Design Icons Font Face declaration*/
@@ -145,6 +202,7 @@ section.app-container .direction-toolbar .joystick i.desc-icons:hover {
        url(https://example.com/MaterialIcons-Regular.woff) format('woff'),
        url(https://example.com/MaterialIcons-Regular.ttf) format('truetype');
 }
+
 .material-icons {
   font-family: 'Material Icons';
   font-weight: normal;
