@@ -1,24 +1,55 @@
 'use strict';
 
 (function () {
+    // Some app configs
+    var CONFIG = {
+        SOCKET_IP_ADDRESS: "192.168.1.45",
+        SOCKET_PORT: 8989
+    };
+
     var robotToken = getRobotToken();
+    var socket = io.connect('http://' + CONFIG.SOCKET_IP_ADDRESS + ':' + CONFIG.SOCKET_PORT);
+
+    // Socket listeners
+    socket.on('pairrobot:success', function (robot) {
+        console.log('Robot found', robot);
+
+        setRobotToken(robot.token);
+        launchApp();
+    });
 
     if (robotToken) {
-        launchApp();
+
+        // Socket listeners
+        socket.on('pairrobot:error', function (err) {
+            console.error(err);
+
+            enableInsertTokenDialog();
+        });
+
+        socket.emit('pairrobot', { token: robotToken });
     } else {
+        enableInsertTokenDialog();
+    }
+
+    // Functions
+    function enableInsertTokenDialog() {
         var findRobotBtn = document.querySelector('button[name="findRobot"]');
         var inputRobotToken = document.querySelector('input[name="robotToken"]');
+        var msgBox = document.querySelector('.find-robot .message');
+
+        socket.on('pairrobot:error', function (err) {
+            msgBox.innerHTML = err;
+        });
 
         findRobotBtn.addEventListener('click', function () {
 
-            if (inputRobotToken.value == '123') {
-                setRobotToken(inputRobotToken.value);
-                launchApp();
+            if (inputRobotToken.value) {
+                socket.emit('pairrobot', { token: inputRobotToken.value });
             }
         });
     }
 
-    // Functions
     function getRobotToken() {
         return localStorage.getItem('robotToken');
     }
@@ -75,33 +106,59 @@
         }
 
         function _searchElement(keyCode) {
+            var moveInstructions = {
+                moveType: null,
+                direction: null
+            };
+            var element;
 
             switch (keyCode) {
                 case 87: //w
-                    return cameraJoystick.foward;
+                    element = cameraJoystick.foward;
+                    moveInstructions.direction = 'FOWARD';
+                    moveInstructions.moveType = 'CAMERA';
                     break;
                 case 65: //a
-                    return cameraJoystick.left;
+                    element = cameraJoystick.left;
+                    moveInstructions.direction = 'LEFT';
+                    moveInstructions.moveType = 'CAMERA';
                     break;
                 case 68: //d
-                    return cameraJoystick.right;
+                    element = cameraJoystick.right;
+                    moveInstructions.direction = 'RIGHT';
+                    moveInstructions.moveType = 'CAMERA';
                     break;
                 case 83: //s
-                    return cameraJoystick.back;
+                    element = cameraJoystick.back;
+                    moveInstructions.direction = 'BACK';
+                    moveInstructions.moveType = 'CAMERA';
                     break;
                 case 38: // arrow up
-                    return movimentJoystick.foward;
+                    element = movimentJoystick.foward;
+                    moveInstructions.direction = 'FOWARD';
+                    moveInstructions.moveType = 'MOTOR';
                     break;
                 case 37: // arrow left
-                    return movimentJoystick.left;
+                    element = movimentJoystick.left;
+                    moveInstructions.direction = 'LEFT';
+                    moveInstructions.moveType = 'MOTOR';
                     break;
                 case 39: // arrow right
-                    return movimentJoystick.right;
+                    element = movimentJoystick.right;
+                    moveInstructions.direction = 'RIGHT';
+                    moveInstructions.moveType = 'MOTOR';
                     break;
                 case 40: //arrow down
-                    return movimentJoystick.back;
+                    element = movimentJoystick.back;
+                    moveInstructions.direction = 'BACK';
+                    moveInstructions.moveType = 'MOTOR';
                     break;
             }
+
+            return {
+                elem: element,
+                moveInstructions: moveInstructions
+            };
         }
 
         // Keypress events to move the robot
@@ -120,15 +177,19 @@
         };
 
         document.onkeydown = function (evt) {
-            var element = _searchElement(evt.keyCode);
+            var instructions = _searchElement(evt.keyCode);
+            var element = instructions.elem;
 
             if (element && !_isKeyPressed(element)) {
                 element.className = element.className.concat(' active');
+
+                socket.emit('robotmoverequest', instructions.moveInstructions);
             }
         };
 
         document.onkeyup = function (evt) {
-            var element = _searchElement(evt.keyCode);
+            var instructions = _searchElement(evt.keyCode);
+            var element = instructions.elem;
 
             if (element) {
                 element.className = 'material-icons';
@@ -140,5 +201,14 @@
         releaseAppContainer();
         openUserCamera();
         initAppEvents();
+
+        // Add listeners for the robot socket events
+        socket.on('robotstream:data', function (evt) {
+            console.log(evt.data);
+        });
+
+        socket.on('robotdisconnected', function () {
+            console.log('Robot disconnected game over!');
+        });
     }
 })();

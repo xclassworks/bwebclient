@@ -82,6 +82,11 @@ section.token-container .find-robot button:active {
     opacity: 0.8;
 }
 
+section.token-container .find-robot .message {
+    color: red;
+    font-size: 0.9em;
+}
+
 section.app-container {
     overflow: hidden;
     width: 100%;
