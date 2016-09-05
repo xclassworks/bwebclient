@@ -209,6 +209,8 @@
 
         socket.on('robotdisconnected', function () {
             console.log('Robot disconnected game over!');
+
+            location.reload();
         });
     }
 })();
