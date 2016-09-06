@@ -193,6 +193,8 @@
 
             if (element) {
                 element.className = 'material-icons';
+
+                socket.emit('robotstoprequest');
             }
         };
     }
@@ -208,8 +210,6 @@
         });
 
         socket.on('robotdisconnected', function () {
-            console.log('Robot disconnected game over!');
-
             location.reload();
         });
     }
