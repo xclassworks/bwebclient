@@ -1,38 +1,46 @@
 'use strict';
 
 (function () {
-    // Some app configs
-    var CONFIG = {
-        SOCKET_IP_ADDRESS: "192.168.1.45",
-        SOCKET_PORT: 8989
-    };
-
-    var robotToken = getRobotToken();
-    var socket = io.connect('http://' + CONFIG.SOCKET_IP_ADDRESS + ':' + CONFIG.SOCKET_PORT);
-
-    // Socket listeners
-    socket.on('pairrobot:success', function (robot) {
-        console.log('Robot found', robot);
-
-        setRobotToken(robot.token);
-        launchApp();
-    });
-
-    if (robotToken) {
-
-        // Socket listeners
-        socket.on('pairrobot:error', function (err) {
-            console.error(err);
-
-            enableInsertTokenDialog();
-        });
-
-        socket.emit('pairrobot', { token: robotToken });
-    } else {
-        enableInsertTokenDialog();
-    }
+    // Glabla refference of socket
+    var socket;
+    
+    // Attempt to get necessary configs for the app
+    getJson('./bconfig/configs.json',
+        initApp,
+        function (status) {
+            console.error('Error requesting app configuration. Http status', status);
+        }
+    );
 
     // Functions
+    function initApp(CONFIGS) {
+        var robotToken = getRobotToken();
+
+        socket = io.connect('http://' + CONFIGS.socketServer.ipAddress + ':' + CONFIGS.socketServer.port);
+
+        // Socket listeners
+        socket.on('pairrobot:success', function (robot) {
+            console.log('Robot found', robot);
+
+            setRobotToken(robot.token);
+            launchApp();
+        });
+
+        if (robotToken) {
+
+            // Socket listeners
+            socket.on('pairrobot:error', function (err) {
+                console.error(err);
+
+                enableInsertTokenDialog();
+            });
+
+            socket.emit('pairrobot', { token: robotToken });
+        } else {
+            enableInsertTokenDialog();
+        }
+    }
+
     function enableInsertTokenDialog() {
         var findRobotBtn = document.querySelector('button[name="findRobot"]');
         var inputRobotToken = document.querySelector('input[name="robotToken"]');
@@ -73,7 +81,7 @@
                     var videoElem = document.querySelector('video#stage');
                     var videoMirror = document.querySelector("video#mirror");
 
-                    videoElem.src = window.URL.createObjectURL(stream);
+                    // videoElem.src = window.URL.createObjectURL(stream);
                     videoMirror.src = window.URL.createObjectURL(stream);
                 },
                 function (err) {
@@ -212,5 +220,33 @@
         socket.on('robotdisconnected', function () {
             location.reload();
         });
+    }
+
+    function getJson(url, successHandler, errorHandler) {
+        var xhr = new XMLHttpRequest();
+
+        xhr.open('get', url, true);
+        
+        xhr.onreadystatechange = function () {
+
+            if (xhr.readyState == 4) {
+
+                if (xhr.status == 200) {
+                    var data = JSON.parse(xhr.responseText);
+                    
+                    invokeCallback(successHandler, [ data ]);
+                } else {
+                    invokeCallback(errorHandler, [ xhr.status ]);
+                }
+            }
+        };
+
+        xhr.send();
+    }
+
+    function invokeCallback(cb, paramsArray) {
+        
+        if (cb && typeof cb == 'function')
+            cb.apply(this, paramsArray);
     }
 })();
