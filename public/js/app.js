@@ -1,9 +1,9 @@
 'use strict';
 
 (function () {
-    // Glabla refference of socket
+    // Global reference of socket
     var socket;
-    
+
     // Attempt to get necessary configs for the app
     getJson('./bconfig/configs.json',
         initApp,
@@ -23,7 +23,7 @@
             console.log('Robot found', robot);
 
             setRobotToken(robot.token);
-            launchApp();
+            launchApp(CONFIGS, robot);
         });
 
         if (robotToken) {
@@ -66,7 +66,7 @@
         return localStorage.setItem('robotToken', robotToken);
     }
 
-    function openUserCamera() {
+    function openUserCamera(pc) {
         navigator.getUserMedia = (navigator.getUserMedia
             || navigator.webkitGetUserMedia
             || navigator.mozGetUserMedia
@@ -78,11 +78,11 @@
             navigator.getUserMedia(
                 { video: true, audio: false },
                 function (stream) {
-                    var videoElem = document.querySelector('video#stage');
                     var videoMirror = document.querySelector("video#mirror");
 
-                    // videoElem.src = window.URL.createObjectURL(stream);
                     videoMirror.src = window.URL.createObjectURL(stream);
+
+                    pc.addStream(stream);
                 },
                 function (err) {
                     console.error(err);
@@ -207,10 +207,10 @@
         };
     }
 
-    function launchApp() {
+    function launchApp(CONFIGS, robot) {
         releaseAppContainer();
-        openUserCamera();
         initAppEvents();
+        createPeerConnection(CONFIGS, robot);
 
         // Add listeners for the robot socket events
         socket.on('robotstream:data', function (evt) {
@@ -222,18 +222,104 @@
         });
     }
 
+    function createPeerConnection(CONFIGS, robot) {
+        var RTCPeerConnection = RTCPeerConnection || webkitRTCPeerConnection;
+        var pc = new RTCPeerConnection(CONFIGS.webRTC);
+
+        pc.onicecandidate = onIceCandidate;
+        pc.onaddstream = onAddRemoteStream;
+        pc.oniceconnectionstatechange = onIceConnectionStateChange;
+
+        openUserCamera(pc);
+
+        socket.on('signalingMessage', handleSignalingMessages);
+
+        socket.emit('signalingMessage', { type: 'sendOffer' });
+
+        function onIceCandidate(event) {
+
+            if (event.candidate) {
+                console.log('onIceCandidate', event.candidate);
+
+                socket.emit('signalingMessage', { type: 'candidate', candidate: event.candidate });
+            }
+        }
+
+        function onAddRemoteStream(evt) {
+            var remoteView = document.querySelector('video#stage');
+
+            remoteView.src = URL.createObjectURL(evt.stream);
+        }
+
+        function onIceConnectionStateChange(event) {
+            console.log('oniceconnectionstatechange status', pc.iceConnectionState);
+        }
+
+        // SignalingMessage handler functions
+
+        function createAnswer(desc) {
+
+            pc.setRemoteDescription(desc).then(
+                function() {
+                    console.log('Set remote description completed with success');
+
+                    pc.createAnswer().then(
+                        onCreateAnswerSuccess,
+                        generalErrorHandler
+                    );
+                },
+                generalErrorHandler
+            );
+        }
+
+        function onCreateAnswerSuccess(desc) {
+
+            pc.setLocalDescription(desc).then(
+                function() {
+                    console.log('Set local description completed with success');
+
+                    socket.emit('signalingMessage', { type: 'offer', desc: desc });
+                },
+                generalErrorHandler
+          );
+        }
+
+        function handleSignalingMessages(message) {
+
+            switch (message.type) {
+                case 'offer':
+                    createAnswer(message.desc);
+                    break;
+                case 'candidate':
+                    var candidate = new RTCIceCandidate(message.candidate);
+
+                    pc.addIceCandidate(candidate).then(
+                        function () {
+                            console.log('Succes adding Ice candidate', candidate);
+                        },
+                        generalErrorHandler
+                    );
+                    break;
+            }
+        }
+
+        function generalErrorHandler(error) {
+            console.error(error.toString());
+        }
+    }
+
     function getJson(url, successHandler, errorHandler) {
         var xhr = new XMLHttpRequest();
 
         xhr.open('get', url, true);
-        
+
         xhr.onreadystatechange = function () {
 
             if (xhr.readyState == 4) {
 
                 if (xhr.status == 200) {
                     var data = JSON.parse(xhr.responseText);
-                    
+
                     invokeCallback(successHandler, [ data ]);
                 } else {
                     invokeCallback(errorHandler, [ xhr.status ]);
@@ -245,7 +331,7 @@
     }
 
     function invokeCallback(cb, paramsArray) {
-        
+
         if (cb && typeof cb == 'function')
             cb.apply(this, paramsArray);
     }
