@@ -164,22 +164,23 @@ section.app-container .direction-toolbar .joystick {
     background: rgba(51,51,51,0.5);
     position: relative;
     margin-top: -100px;
-    padding: 10px;
+    padding: 5px;
     border-radius: 60px;
-    box-shadow: 1px 1px 2px rgba(51,51,51,0.6);
     margin-left: 10px;
     margin-right: 10px;
 }
 
 section.app-container .direction-toolbar .joystick i {
     cursor: pointer;
-    padding: 0 10px;
+    margin: 0 10px;
+    border-radius: 50%;
+    padding: 6px;
     color: #FFF;
 }
 
 section.app-container .direction-toolbar .joystick i:hover,
 section.app-container .direction-toolbar .joystick i.active {
-    color: rgba(50,207,159,1);
+    background: rgba(50,207,159,1);
 }
 
 section.app-container .direction-toolbar .joystick i.desc-icons {
@@ -187,7 +188,7 @@ section.app-container .direction-toolbar .joystick i.desc-icons {
 }
 
 section.app-container .direction-toolbar .joystick i.desc-icons:hover {
-    color: #FFF !important;
+    background: none !important;
 }
 
 .mask {
