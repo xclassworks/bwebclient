@@ -5,7 +5,7 @@
     var socket;
 
     // Attempt to get necessary configs for the app
-    getJson('./bconfig/configs.json',
+    getJson('https://raw.githubusercontent.com/xclassworks/bconfig/master/configs.json',
         initApp,
         function (status) {
             console.error('Error requesting app configuration. Http status', status);
@@ -146,14 +146,14 @@
                     moveInstructions.direction = 'FOWARD';
                     moveInstructions.moveType = 'MOTOR';
                     break;
-                case 37: // arrow left
+                case 37: // arrow left Gambeta
                     element = movimentJoystick.left;
-                    moveInstructions.direction = 'LEFT';
+                    moveInstructions.direction = 'RIGHT';
                     moveInstructions.moveType = 'MOTOR';
                     break;
-                case 39: // arrow right
+                case 39: // arrow right Gambeta
                     element = movimentJoystick.right;
-                    moveInstructions.direction = 'RIGHT';
+                    moveInstructions.direction = 'LEFT';
                     moveInstructions.moveType = 'MOTOR';
                     break;
                 case 40: //arrow down
