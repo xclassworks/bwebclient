@@ -5,7 +5,7 @@ let app = express();
 let server = require('http').Server(app);
 let io = require('socket.io')(server);
 
-const PORT = 8888;
+const PORT = 8080;
 
 server.listen(PORT, () => {
     console.log('[INFO] Server up and runnig at PORT', PORT);
