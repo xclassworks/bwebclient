@@ -2,7 +2,7 @@
 
 let express = require('express');
 let app = express();
-let server = require('http').Server(app);
+let server = require('https').Server(app);
 let io = require('socket.io')(server);
 
 const PORT = 8080;
