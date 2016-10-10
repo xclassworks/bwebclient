@@ -233,3 +233,16 @@ section.app-container .direction-toolbar .joystick i.desc-icons:hover {
   /* Support for IE. */
   font-feature-settings: 'liga';
 }
+
+/* Experimental styles */
+
+.big-icon {
+    font-size: 4em !important;
+    padding: 40px;
+    display: block !important;
+    text-align: center;
+}
+
+.centralized-text {
+    text-align: center;
+}
