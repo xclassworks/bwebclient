@@ -5,7 +5,7 @@
     var socket;
 
     // Attempt to get necessary configs for the app
-    getJson('https://raw.githubusercontent.com/xclassworks/bconfig/master/configs.json',
+    getJson('/configs',
         initApp,
         function (status) {
             console.error('Error requesting app configuration. Http status', status);
@@ -15,8 +15,16 @@
     // Functions
     function initApp(CONFIGS) {
         var robotToken = getRobotToken();
+        var transportProtocol;
 
-        socket = io.connect('http://' + CONFIGS.socketServer.ipAddress + ':' + CONFIGS.socketServer.port);
+        if (CONFIGS.useSecureServer) {
+            transportProtocol = 'https';
+        } else {
+            transportProtocol = 'http';
+        }
+
+        socket = io.connect(transportProtocol + '://' +
+                                CONFIGS.socketServer.address + ':' + CONFIGS.socketServer.port);
 
         // Socket listeners
         socket.on('pairrobot:success', function (robot) {
