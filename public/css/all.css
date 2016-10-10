@@ -31,6 +31,18 @@ header#app-header .slogan {
     color: rgba(38,38,38,0.5);
 }
 
+header#app-header .slogan .detect-faces-btn {
+    margin-left: 20px;
+    color: #262626;
+    cursor: pointer;
+    float: right;
+    margin-top: -3px;
+}
+
+header#app-header .slogan .active {
+    color: #3d81ef;
+}
+
 section.token-container {
     position: fixed;
     z-index: 3;
@@ -145,6 +157,7 @@ section.app-container .viewer-container .person-name {
     font-size: 0.7em;
     max-width: 95px;
     word-break: break-word;
+    cursor: default;
 }
 
 section.app-container .direction-toolbar {

@@ -230,6 +230,20 @@
                 doAMoveRequest(moveInstruction);
             });
         }
+
+        // Detect faces button
+        var detectFacesButton = document.querySelector('.detect-faces-btn');
+
+        detectFacesButton.addEventListener('click', function () {
+
+            if (detectFacesButton.className.indexOf(' active') > -1) {
+                detectFacesButton.className = detectFacesButton.className.replace(' active', '');
+                detectFacesButton.title = 'Detectar rostos';
+            } else {
+                detectFacesButton.className = detectFacesButton.className.concat(' active');
+                detectFacesButton.title = 'Parar de detectar rostos';
+            }
+        });
     }
 
     function launchApp(CONFIGS, robot) {
