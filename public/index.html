@@ -12,49 +12,81 @@
     <body>
         <header id="app-header">
             <div class="bmate">Bmate</div>
-            <div class="slogan">Keeping people in touch</div>
+            <div class="slogan">Mantendo você perto de quem mais importa</div>
         </header>
         <section class="token-container">
             <div class="find-robot">
-                <h3>Please insert the robot token to start talk</h3>
+                <h3>Por favor insira o token do robô para começar a falar</h3>
                 <div class="message"></div>
-                <input type="text" name="robotToken" placeholder="Robot token" />
-                <button type="button" name="findRobot">Find robot</button>
+                <input type="text" name="robotToken" placeholder="Token do robô" />
+                <button type="button" name="findRobot">Encontrar robô</button>
             </div>
         </section>
         <section class="app-container mask">
-            <section class="receiver-container">
-                <!-- <img src="http://gravatar.com/avatar/d4b5ce7252972661c76349aa2013e74b?d=retro"
-                    title="New person" /> -->
-                <img src="http://gravatar.com/avatar/21733486eab437f1e2c230537de4fb9d?d=retro"
-                    title="New person" />
 
-                <div class="person-name">
-                    <div class="talt-phrase">Talking to</div> <strong>New Person</strong>
+            <section class="viewer-container">
+                <div class="viewer">
+                    <div class="viewer-thumb">
+                        <video autoplay id="mirror"></video>
+                    </div>
+                    <div class="person-name"><strong>Você</strong></div>
                 </div>
+                <div class="viewer">
+                    <div class="viewer-thumb">
+                        <img src="http://media.salon.com/2014/12/bojack_horseman2.jpg"/>
+                    </div>
+                    <div class="person-name"><strong>Bo Jack</strong></div>
+                </div>
+                <div class="viewer">
+                    <div class="viewer-thumb">
+                        <img src="https://salveacritica.files.wordpress.com/2015/08/cueca.png?w=334&h=437"/>
+                    </div>
+                    <div class="person-name"><strong>Irmão do Jorel</strong></div>
+                </div>
+
+                <div class="viewer">
+                    <div class="viewer-thumb">
+                        <img src="http://www.cinemaemuitomais.com/wp-content/uploads/2014/04/He-Man-282.jpg"/>
+                    </div>
+                    <div class="person-name"><strong>He-man</strong></div>
+                </div>
+
+                <div class="viewer">
+                    <div class="viewer-thumb">
+                        <img src="http://vignette4.wikia.nocookie.net/laricatarugo/images/a/aa/Dollynho_no_h_sabor_igual_(2).png/revision/latest?cb=20140116181809&path-prefix=pt"/>
+                    </div>
+                    <div class="person-name"><strong>Dollynho<strong></div>
+                </div>
+
+
             </section>
 
             <video autoplay id="stage"></video>
-            <video autoplay id="mirror"></video>
 
             <section class="direction-toolbar">
-                <div class="camera-joystick joystick">
+                <!-- <div class="camera-joystick joystick">
                     <div class="container">
                         <i class="material-icons desc-icons" title="Camera Control">photo_camera</i>
-                        <i class="material-icons" type="foward" title="Foward">keyboard_arrow_up</i>
-                        <i class="material-icons" type="back" title="Back">keyboard_arrow_down</i>
-                        <i class="material-icons" type="left" title="Left">keyboard_arrow_left</i>
-                        <i class="material-icons" type="right" title="Right">keyboard_arrow_right</i>
+                        <i class="material-icons" type="foward" title="Frente">keyboard_arrow_up</i>
+                        <i class="material-icons" type="back" title="Traz">keyboard_arrow_down</i>
+                        <i class="material-icons" type="left" title="Esquerda">keyboard_arrow_left</i>
+                        <i class="material-icons" type="right" title="Direita">keyboard_arrow_right</i>
                     </div>
-                </div>
+                </div> -->
 
                 <div class="moviment-joystick joystick">
                     <div class="container">
-                        <i class="material-icons desc-icons" title="Motors Control">airport_shuttler</i>
-                        <i class="material-icons" type="foward" title="Foward">keyboard_arrow_up</i>
-                        <i class="material-icons" type="back" title="Back">keyboard_arrow_down</i>
-                        <i class="material-icons" type="left" title="Left">keyboard_arrow_left</i>
-                        <i class="material-icons" type="right" title="Right">keyboard_arrow_right</i>
+                        <i class="material-icons desc-icons" title="Controle do robô">airport_shuttler</i>
+                        <i class="material-icons" type="foward" title="Frente">keyboard_arrow_up</i>
+                        <i class="material-icons" type="back" title="Traz">keyboard_arrow_down</i>
+                        <i class="material-icons" type="left" title="Esquerda">keyboard_arrow_left</i>
+                        <i class="material-icons" type="right" title="Direita">keyboard_arrow_right</i>
+                    </div>
+                </div>
+
+                <div class="joystick end-call">
+                    <div class="container">
+                        <i class="material-icons" title="Encerrar chamada">call_end</i>
                     </div>
                 </div>
             </section>

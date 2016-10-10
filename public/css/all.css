@@ -105,46 +105,46 @@ section.app-container video#stage {
     height: 85%;
 }
 
-section.app-container video#mirror {
+section.app-container .viewer-container {
+    width: 25%;
+    height: 100%;
+    z-index: 1000;
     position: absolute;
-    width: 100px;
-    border-radius: 3px;
-    top: 30px;
-    right: 5%;
-    background: rgba(50,207,159,0.5);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    transition: all 0.5s ease;
 }
 
-section.app-container .receiver-container {
-    width: 95%;
-    display: block;
-    margin: auto;
+section.app-container .viewer-container .viewer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 
-section.app-container .receiver-container img {
+section.app-container .viewer-container .viewer-thumb {
     border: 4px solid rgba(50,207,159,0.5);
     border-radius: 50%;
-    height: 60px;
-    width: 60px;
-    position: absolute;
+    height: 70px;
+    width: 70px;
     margin: 10px;
     z-index: 2;
+    overflow: hidden;
 }
 
-section.app-container .receiver-container .person-name {
+section.app-container .viewer-container .viewer-thumb video,
+section.app-container .viewer-container .viewer-thumb img {
+    height: 70px;
+}
+
+section.app-container .viewer-container .person-name {
     border-radius: 30px;
-    position: absolute;
-    z-index: 2;
     background: rgba(0,0,0,0.6);
     color: #FFF;
     padding: 10px 20px;
-    font-size: 0.8em;
-    margin-top: 25px;
-    margin-left: 90px;
-}
-
-section.app-container .receiver-container .person-name .talt-phrase {
-    display: none;
-    transition: width 0.2s ease;
+    font-size: 0.7em;
+    max-width: 95px;
+    word-break: break-word;
 }
 
 section.app-container .direction-toolbar {
@@ -152,12 +152,22 @@ section.app-container .direction-toolbar {
     display: flex;
     margin: auto;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+}
+
+section.app-container .direction-toolbar .end-call {
+    background: #db4336 !important;
+    cursor: pointer;
+}
+
+section.app-container .direction-toolbar .end-call i:hover,
+section.app-container .direction-toolbar .end-call i:active {
+    background: none !important;
 }
 
 section.app-container .direction-toolbar .joystick {
