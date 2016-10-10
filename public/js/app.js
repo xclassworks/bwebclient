@@ -121,6 +121,10 @@
             return false;
         }
 
+        function doAMoveRequest(moveInstruction) {
+            socket.emit('robotmoverequest', moveInstruction);
+        }
+
         function _searchElement(keyCode) {
             var moveInstructions = {
                 moveType: null,
@@ -199,7 +203,7 @@
             if (element && !_isKeyPressed(element)) {
                 element.className = element.className.concat(' active');
 
-                socket.emit('robotmoverequest', instructions.moveInstructions);
+                doAMoveRequest(instructions.moveInstructions);
             }
         };
 
@@ -213,6 +217,19 @@
                 socket.emit('robotstoprequest');
             }
         };
+
+        // Init Click events
+        for (var command in movimentJoystick) {
+            var buttonElement = movimentJoystick[command];
+            var moveInstruction = {
+                direction: command.toUpperCase(),
+                moveType: 'MOTOR'
+            };
+
+            buttonElement.addEventListener('click', function () {
+                doAMoveRequest(moveInstruction);
+            });
+        }
     }
 
     function launchApp(CONFIGS, robot) {
