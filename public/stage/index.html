@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Bmate - Mantendo você perto de quem mais importa</title>
+        <link rel="stylesheet" href="/css/all.css" media="screen" charset="utf-8">
+
+        <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" media="all"
+            rel="stylesheet" type="text/css" />
+        <link rel="shortcut icon" href="/images/favicon.ico">
+    </head>
+    <body>
+        <header id="app-header">
+            <a href="/" class="bmate">Bmate</a>
+            <div class="slogan">
+                Mantendo você perto de quem mais importa
+                <i class="material-icons detect-faces-btn md-inactive" title="Detectar rostos">face</i>
+            </div>
+        </header>
+        <!-- <section class="token-container">
+            <div class="find-robot">
+                <h3>Por favor insira o token do robô para começar a falar</h3>
+                <div class="message"></div>
+                <input type="text" name="robotToken" placeholder="Token do robô" />
+                <button type="button" name="findRobot">Encontrar robô</button>
+            </div>
+        </section> -->
+        <section class="app-container mask">
+
+            <section class="viewer-container">
+                <div class="viewer">
+                    <div class="viewer-thumb">
+                        <video autoplay id="mirror"></video>
+                    </div>
+                    <div class="person-name"><strong>Você</strong></div>
+                </div>
+                <div class="viewer">
+                    <div class="viewer-thumb">
+                        <img src="http://media.salon.com/2014/12/bojack_horseman2.jpg"/>
+                    </div>
+                    <div class="person-name"><strong>Bo Jack</strong></div>
+                </div>
+                <div class="viewer">
+                    <div class="viewer-thumb">
+                        <img src="https://salveacritica.files.wordpress.com/2015/08/cueca.png?w=334&h=437"/>
+                    </div>
+                    <div class="person-name"><strong>Irmão do Jorel</strong></div>
+                </div>
+
+                <div class="viewer">
+                    <div class="viewer-thumb">
+                        <img src="http://www.cinemaemuitomais.com/wp-content/uploads/2014/04/He-Man-282.jpg"/>
+                    </div>
+                    <div class="person-name"><strong>He-man</strong></div>
+                </div>
+
+                <div class="viewer">
+                    <div class="viewer-thumb">
+                        <img src="http://vignette4.wikia.nocookie.net/laricatarugo/images/a/aa/Dollynho_no_h_sabor_igual_(2).png/revision/latest?cb=20140116181809&path-prefix=pt"/>
+                    </div>
+                    <div class="person-name"><strong>Dollynho<strong></div>
+                </div>
+
+
+            </section>
+
+            <video autoplay id="stage"></video>
+
+            <section class="direction-toolbar">
+                <!-- <div class="camera-joystick joystick">
+                    <div class="container">
+                        <i class="material-icons desc-icons" title="Camera Control">photo_camera</i>
+                        <i class="material-icons" type="foward" title="Frente">keyboard_arrow_up</i>
+                        <i class="material-icons" type="back" title="Traz">keyboard_arrow_down</i>
+                        <i class="material-icons" type="left" title="Esquerda">keyboard_arrow_left</i>
+                        <i class="material-icons" type="right" title="Direita">keyboard_arrow_right</i>
+                    </div>
+                </div> -->
+
+                <div class="moviment-joystick joystick">
+                    <div class="container">
+                        <i class="material-icons desc-icons" title="Controle do robô">airport_shuttler</i>
+                        <i class="material-icons" type="foward" title="Frente">keyboard_arrow_up</i>
+                        <i class="material-icons" type="back" title="Traz">keyboard_arrow_down</i>
+                        <i class="material-icons" type="left" title="Esquerda">keyboard_arrow_left</i>
+                        <i class="material-icons" type="right" title="Direita">keyboard_arrow_right</i>
+                    </div>
+                </div>
+
+                <div class="joystick end-call">
+                    <div class="container">
+                        <i class="material-icons" title="Encerrar chamada">call_end</i>
+                    </div>
+                </div>
+            </section>
+        </section>
+        <footer></footer>
+
+        <script src="/socket.io/socket.io.js"></script>
+        <script type="text/javascript" src="/js/app.js"></script>
+    </body>
+</html>

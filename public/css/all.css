@@ -24,6 +24,7 @@ header#app-header .bmate {
     font-weight: bold;
     color: #32cf9f;
     font-size: 1.2em;
+    text-decoration: none;
 }
 
 header#app-header .slogan {
@@ -255,4 +256,24 @@ section.app-container .direction-toolbar .joystick i.desc-icons:hover {
 
   /* Support for IE. */
   font-feature-settings: 'liga';
+}
+
+.big-icon {
+    font-size: 4em !important;
+    padding: 40px;
+    display: block !important;
+    text-align: center;
+}
+
+.centralized-text {
+    text-align: center;
+}
+
+.gray {
+    opacity: 0.6;
+}
+
+.md-inactive {
+    opacity: 0.26;
+    cursor: default !important;
 }

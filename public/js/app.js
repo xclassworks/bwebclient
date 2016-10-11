@@ -14,39 +14,60 @@
 
     // Functions
     function initApp(CONFIGS) {
-        var robotToken = getRobotToken();
-        var transportProtocol;
+        var authToken = getAuthorizationToken();
 
-        if (CONFIGS.useSecureServer) {
-            transportProtocol = 'https';
-        } else {
-            transportProtocol = 'http';
-        }
+        if (authToken) {
+            var transportProtocol;
 
-        socket = io.connect(transportProtocol + '://' +
-                                CONFIGS.socketServer.address + ':' + CONFIGS.socketServer.port);
+            if (CONFIGS.useSecureServer) {
+                transportProtocol = 'https';
+            } else {
+                transportProtocol = 'http';
+            }
 
-        // Socket listeners
-        socket.on('pairrobot:success', function (robot) {
-            console.log('Robot found', robot);
-
-            setRobotToken(robot.token);
-            launchApp(CONFIGS, robot);
-        });
-
-        if (robotToken) {
+            socket = io.connect(transportProtocol + '://' +
+                                    CONFIGS.socketServer.address + ':' + CONFIGS.socketServer.port);
 
             // Socket listeners
-            socket.on('pairrobot:error', function (err) {
-                console.error(err);
+            socket.on('pairrobot:success', function (robot) {
+                console.log('Robot found', robot);
 
-                enableInsertTokenDialog();
+                setAuthToken(robot.token);
+                launchApp(CONFIGS, robot);
             });
 
-            socket.emit('pairrobot', { token: robotToken });
-        } else {
-            enableInsertTokenDialog();
-        }
+            if (authToken) {
+
+                // Socket listeners
+                socket.on('pairrobot:error', function (err) {
+                    clearAuthToken();
+                    redirectToNoBotPage();
+                });
+
+                socket.emit('pairrobot', { authToken: authToken });
+            } else
+                redirectToNoBotPage();
+
+        } else
+            redirectToNoBotPage();
+    }
+
+    function redirectToNoBotPage() {
+        window.location = '../nobot';
+    }
+
+    function getAuthorizationToken() {
+        var storagedToken = localStorage.getItem('robotToken');
+
+        if (storagedToken)
+            return storagedToken;
+
+        var hash = location.hash;
+
+        if (!hash || hash.indexOf('#join/') == -1)
+            return;
+
+        return hash.split('/')[1];
     }
 
     function enableInsertTokenDialog() {
@@ -66,12 +87,16 @@
         });
     }
 
-    function getRobotToken() {
-        return localStorage.getItem('robotToken');
+    function getAuthToken() {
+        return localStorage.getItem('authToken');
     }
 
-    function setRobotToken(robotToken) {
-        return localStorage.setItem('robotToken', robotToken);
+    function setAuthToken(authToken) {
+        localStorage.setItem('authToken', authToken);
+    }
+
+    function clearAuthToken() {
+        localStorage.setItem('authToken', null);
     }
 
     function openUserCamera(pc) {
