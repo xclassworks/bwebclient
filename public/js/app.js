@@ -29,22 +29,21 @@
                                     CONFIGS.socketServer.address + ':' + CONFIGS.socketServer.port);
 
             // Socket listeners
-            socket.on('pairrobot:success', function (robot) {
-                console.log('Robot found', robot);
+            socket.on('join_robot_room:success', function (viewer) {
+                console.log('Robot found', viewer);
 
-                setAuthToken(robot.token);
-                launchApp(CONFIGS, robot);
+                launchApp(CONFIGS, viewer.robot);
             });
 
             if (authToken) {
 
                 // Socket listeners
-                socket.on('pairrobot:error', function (err) {
+                socket.on('join_robot_room:error', function (err) {
                     clearAuthToken();
                     redirectToNoBotPage();
                 });
 
-                socket.emit('pairrobot', { authToken: authToken });
+                socket.emit('join_robot_room', authToken, { name: 'Espectador fanático' });
             } else
                 redirectToNoBotPage();
 
@@ -91,19 +90,15 @@
         return localStorage.getItem('authToken');
     }
 
-    function setAuthToken(authToken) {
-        localStorage.setItem('authToken', authToken);
-    }
-
     function clearAuthToken() {
         localStorage.setItem('authToken', null);
     }
 
     function openUserCamera(pc) {
-        navigator.getUserMedia = (navigator.getUserMedia
-            || navigator.webkitGetUserMedia
-            || navigator.mozGetUserMedia
-            || navigator.msgGetUserMedia);
+        navigator.getUserMedia = (navigator.getUserMedia ||
+            navigator.webkitGetUserMedia ||
+            navigator.mozGetUserMedia ||
+            navigator.msgGetUserMedia);
 
         if (navigator.getUserMedia) {
             console.log('[OK] Your browser supports the video feature o/');
@@ -120,16 +115,15 @@
                 function (err) {
                     console.error(err);
                 });
-        } else {
+        } else
             console.warn('[FAIL] Your browser does not support the video feature');
-        }
     }
 
     function releaseAppContainer() {
-        var tokenCtn = document.querySelector('.token-container');
+        // var tokenCtn = document.querySelector('.token-container');
         var appCtn = document.querySelector('.app-container');
 
-        document.body.removeChild(tokenCtn);
+        // document.body.removeChild(tokenCtn);
 
         appCtn.className = appCtn.className.replace('mask', '');
     }
@@ -139,15 +133,14 @@
         // Auxiliar functions
         function _isKeyPressed(element) {
 
-            if (element.className.indexOf('active') > -1) {
+            if (element.className.indexOf('active') > -1)
                 return true;
-            }
 
             return false;
         }
 
         function doAMoveRequest(moveInstruction) {
-            socket.emit('robotmoverequest', moveInstruction);
+            socket.emit('robot_move_request', moveInstruction);
         }
 
         function _searchElement(keyCode) {
@@ -239,7 +232,7 @@
             if (element) {
                 element.className = 'material-icons';
 
-                socket.emit('robotstoprequest');
+                socket.emit('robot_stop_request');
             }
         };
 
@@ -276,19 +269,15 @@
         initAppEvents();
         createPeerConnection(CONFIGS, robot);
 
-        // Add listeners for the robot socket events
-        socket.on('robotstream:data', function (evt) {
-            console.log(evt.data);
-        });
-
-        socket.on('robotdisconnected', function () {
+        // Add listeners for the robot_disconnected socket event
+        socket.on('robot_disconnected', function () {
             location.reload();
         });
     }
 
     function createPeerConnection(CONFIGS, robot) {
-        var RTCPeerConnection = RTCPeerConnection || webkitRTCPeerConnection;
-        var pc = new RTCPeerConnection(CONFIGS.webRTC);
+        var RTCPeerConn = RTCPeerConnection || webkitRTCPeerConnection;
+        var pc = new RTCPeerConn(CONFIGS.webRTC);
 
         pc.onicecandidate = onIceCandidate;
         pc.onaddstream = onAddRemoteStream;
@@ -296,16 +285,18 @@
 
         openUserCamera(pc);
 
-        socket.on('signalingMessage', handleSignalingMessages);
+        socket.on('signaling_message', handleSignalingMessages);
+        socket.on('signaling_message:error', handleSignalingMessagesError);
 
-        socket.emit('signalingMessage', { type: 'sendOffer' });
+        // Request offer to the robot
+        socket.emit('signaling_message', { to: robot.id, type: 'request_offer' });
 
         function onIceCandidate(event) {
 
             if (event.candidate) {
                 console.log('onIceCandidate', event.candidate);
 
-                socket.emit('signalingMessage', { type: 'candidate', candidate: event.candidate });
+                socket.emit('signaling_message', { type: 'candidate', candidate: event.candidate });
             }
         }
 
@@ -350,6 +341,8 @@
 
         function handleSignalingMessages(message) {
 
+            console.log(message);
+
             switch (message.type) {
                 case 'offer':
                     createAnswer(message.desc);
@@ -365,6 +358,10 @@
                     );
                     break;
             }
+        }
+
+        function handleSignalingMessagesError(error) {
+            console.error(error);
         }
 
         function generalErrorHandler(error) {
