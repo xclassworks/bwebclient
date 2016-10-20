@@ -30,7 +30,7 @@
 
             // Socket listeners
             socket.on('join_robot_room:success', function (viewer) {
-                console.log('Robot found', viewer);
+                // console.log('Robot found', viewer);
 
                 launchApp(CONFIGS, viewer.robot);
             });
@@ -101,7 +101,7 @@
             navigator.msgGetUserMedia);
 
         if (navigator.getUserMedia) {
-            console.log('[OK] Your browser supports the video feature o/');
+            // console.log('[OK] Your browser supports the video feature o/');
 
             navigator.getUserMedia(
                 { video: true, audio: false },
@@ -250,17 +250,22 @@
         }
 
         // Detect faces button
-        var detectFacesButton = document.querySelector('.detect-faces-btn');
+        // var detectFacesButton = document.querySelector('.detect-faces-btn');
+        //
+        // detectFacesButton.addEventListener('click', function () {
+        //
+        //     if (detectFacesButton.className.indexOf(' active') > -1) {
+        //         detectFacesButton.className = detectFacesButton.className.replace(' active', '');
+        //         detectFacesButton.title = 'Detectar rostos';
+        //     } else {
+        //         detectFacesButton.className = detectFacesButton.className.concat(' active');
+        //         detectFacesButton.title = 'Parar de detectar rostos';
+        //     }
+        // });
 
-        detectFacesButton.addEventListener('click', function () {
-
-            if (detectFacesButton.className.indexOf(' active') > -1) {
-                detectFacesButton.className = detectFacesButton.className.replace(' active', '');
-                detectFacesButton.title = 'Detectar rostos';
-            } else {
-                detectFacesButton.className = detectFacesButton.className.concat(' active');
-                detectFacesButton.title = 'Parar de detectar rostos';
-            }
+        // Hang up button action
+        document.querySelector('.end-call').addEventListener('click', function () {
+            redirectToHome();
         });
     }
 
@@ -271,12 +276,16 @@
 
         // Add listeners for the robot_disconnected socket event
         socket.on('robot_disconnected', function () {
-            location.reload();
+            redirectToHome();
         });
     }
 
+    function redirectToHome() {
+        window.location = '/';
+    }
+
     function createPeerConnection(CONFIGS, robot) {
-        var RTCPeerConn = RTCPeerConnection || webkitRTCPeerConnection;
+        var RTCPeerConn = window.RTCPeerConnection || window.webkitRTCPeerConnection;
         var pc = new RTCPeerConn(CONFIGS.webRTC);
 
         pc.onicecandidate = onIceCandidate;
@@ -294,9 +303,13 @@
         function onIceCandidate(event) {
 
             if (event.candidate) {
-                console.log('onIceCandidate', event.candidate);
+                // console.log('onIceCandidate', event.candidate);
 
-                socket.emit('signaling_message', { type: 'candidate', candidate: event.candidate });
+                socket.emit('signaling_message', {
+                    type: 'candidate',
+                    candidate: event.candidate,
+                    to: event.candidate.to
+                });
             }
         }
 
@@ -307,19 +320,19 @@
         }
 
         function onIceConnectionStateChange(event) {
-            console.log('oniceconnectionstatechange status', pc.iceConnectionState);
+            // console.log('oniceconnectionstatechange status', pc.iceConnectionState);
         }
 
         // SignalingMessage handler functions
 
-        function createAnswer(desc) {
+        function createAnswer(desc, message) {
 
             pc.setRemoteDescription(desc).then(
                 function() {
-                    console.log('Set remote description completed with success');
+                    // console.log('Set remote description completed with success');
 
                     pc.createAnswer().then(
-                        onCreateAnswerSuccess,
+                        (desc) => onCreateAnswerSuccess(desc, message),
                         generalErrorHandler
                     );
                 },
@@ -327,13 +340,13 @@
             );
         }
 
-        function onCreateAnswerSuccess(desc) {
+        function onCreateAnswerSuccess(desc, message) {
 
             pc.setLocalDescription(desc).then(
                 function() {
-                    console.log('Set local description completed with success');
+                    // console.log('Set local description completed swith success');
 
-                    socket.emit('signalingMessage', { type: 'offer', desc: desc });
+                    socket.emit('signaling_message', { type: 'offer', desc: desc, to: message.from });
                 },
                 generalErrorHandler
           );
@@ -345,19 +358,60 @@
 
             switch (message.type) {
                 case 'offer':
-                    createAnswer(message.desc);
+                    createAnswer(message.desc, message);
                     break;
                 case 'candidate':
                     var candidate = new RTCIceCandidate(message.candidate);
 
+                    candidate.to = message.from;
+
                     pc.addIceCandidate(candidate).then(
                         function () {
-                            console.log('Succes adding Ice candidate', candidate);
+                            // console.log('Succes adding Ice candidate', candidate);
                         },
                         generalErrorHandler
                     );
                     break;
+                case 'viewer_request_offer':
+                    createOffer(message);
+                    break;
+                case 'viewer_offer_answer':
+                    setRemoteDescription(message.desc);
+                    break;
             }
+        }
+
+        function setRemoteDescription(desc) {
+
+            pc.setRemoteDescription(desc).then(
+                function() {
+                    // console.log('Set remote description completed with success viewer_offer_answer');
+                },
+                generalErrorHandler
+            );
+        }
+
+        function createOffer(message) {
+            // console.log('We are going to create a response for the offer request');
+
+            var offerConstraints = {
+                offerToReceiveAudio: 1,
+                offerToReceiveVideo: 1
+            };
+
+            pc.createOffer(offerConstraints).then(function(offer) {
+                return pc.setLocalDescription(offer);
+            })
+            .then(function () {
+                var response = {
+                    type:   'viewer_offer',
+                    to:     message.from,
+                    desc:   pc.localDescription
+                };
+
+                socket.emit('signaling_message', response);
+            })
+            .catch(generalErrorHandler);
         }
 
         function handleSignalingMessagesError(error) {
