@@ -176,14 +176,14 @@
                     moveInstructions.direction = 'FOWARD';
                     moveInstructions.moveType = 'MOTOR';
                     break;
-                case 37: // arrow left Gambeta
+                case 37: // arrow left
                     element = movimentJoystick.left;
-                    moveInstructions.direction = 'RIGHT';
+                    moveInstructions.direction = 'LEFT';
                     moveInstructions.moveType = 'MOTOR';
                     break;
-                case 39: // arrow right Gambeta
+                case 39: // arrow right
                     element = movimentJoystick.right;
-                    moveInstructions.direction = 'LEFT';
+                    moveInstructions.direction = 'RIGHT';
                     moveInstructions.moveType = 'MOTOR';
                     break;
                 case 40: //arrow down
